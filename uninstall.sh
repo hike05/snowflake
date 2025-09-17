@@ -13,7 +13,6 @@ echo "Note: This will NOT uninstall Nix itself"
 echo ""
 echo "Continue? [y/N]"
 read -p "" -n 1 -r
-echo
 
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
