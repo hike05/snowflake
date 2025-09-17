@@ -1,0 +1,102 @@
+{ config, pkgs, lib, username, self, ... }:
+
+{
+  imports = [
+    ./homebrew.nix
+    ./system.nix
+  ];
+
+  # State version for Darwin configuration
+  # https://github.com/LnL7/nix-darwin/blob/master/CHANGELOG
+  system.stateVersion = 6;
+  
+  # Track git revision for reproducibility
+  system.configurationRevision = self.rev or self.dirtyRev or null;
+
+  # Nix configuration
+  nix = {
+    # Enable experimental features
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      warn-dirty = false;
+      auto-optimise-store = true;
+      
+      # Trusted users for binary cache
+      trusted-users = [ "root" username ];
+      
+      # Binary caches for faster builds
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
+    
+    # Garbage collection
+    gc = {
+      automatic = true;
+      interval = { 
+        Weekday = 0;  # Sunday
+        Hour = 2;     # 2 AM
+        Minute = 0; 
+      };
+      options = "--delete-older-than 14d";
+    };
+    
+    # Store optimization
+    optimise = {
+      automatic = true;
+      interval = { Weekday = 0; Hour = 3; Minute = 0; };
+    };
+  };
+
+  # Enable nix daemon
+  services.nix-daemon.enable = true;
+  
+  # System packages available to all users
+  environment.systemPackages = with pkgs; [
+    # Essentials
+    git
+    curl
+    wget
+    tree
+    htop
+    
+    # Nix tools
+    nixpkgs-fmt
+    nil  # Nix LSP
+    nix-tree
+    
+    # Modern CLI tools
+    ripgrep
+    fd
+    jq
+    bat
+    eza
+    zoxide
+  ];
+
+  # Shell configuration
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+  };
+  
+  # User configuration
+  users.users.${username} = {
+    name = username;
+    home = "/Users/${username}";
+    shell = pkgs.zsh;
+  };
+  
+  # Fonts
+  fonts = {
+    packages = with pkgs; [
+      (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" ]; })
+      inter
+    ];
+  };
+}

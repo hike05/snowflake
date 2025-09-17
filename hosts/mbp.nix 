@@ -1,0 +1,31 @@
+{ config, pkgs, ... }:
+
+{
+  # Machine-specific identity
+  networking = {
+    computerName = "mbp";
+    hostName = "macbook-pro";
+    localHostName = "macbook-pro";
+  };
+  
+  # Laptop-specific settings
+  system.defaults = {
+    # Battery optimization
+    NSGlobalDomain = {
+      "com.apple.PowerChargingMode" = "Optimized";
+    };
+    
+    # Trackpad for laptop
+    trackpad = {
+      Clicking = true;
+      TrackpadRightClick = true;
+      TrackpadThreeFingerDrag = true;
+    };
+  };
+  
+  # Additional software for work laptop
+  #homebrew.casks = [
+  #  "microsoft-teams"
+  #  "vmware-fusion"
+  #];
+}

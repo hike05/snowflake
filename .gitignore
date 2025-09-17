@@ -1,0 +1,32 @@
+# Nix artifacts
+result
+result-*
+flake.lock
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Direnv
+.direnv/
+.envrc
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Local notes
+TODO.md
+notes.md
+.scratch/

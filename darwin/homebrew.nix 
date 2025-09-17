@@ -1,0 +1,61 @@
+{ config, pkgs, ... }:
+
+{
+  homebrew = {
+    enable = true;
+    
+    # Activation settings
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      # "none" | "uninstall" | "zap"
+      cleanup = "none";  # Start safe, change to "uninstall" later
+    };
+    
+    # Homebrew taps
+    taps = [
+      "homebrew/services"
+      "homebrew/cask-versions"
+    ];
+    
+    # CLI formulae not in nixpkgs
+    brews = [
+      "mas"  # Mac App Store CLI
+    ];
+    
+    # GUI applications
+    casks = [
+      # Browsers
+      "google-chrome"
+      
+      # Development
+      "visual-studio-code"
+      "cursor"
+      "iterm2"
+      "warp"
+      "docker"
+      "orbstack"
+      "tableplus"
+      "insomnia"
+      
+      # Productivity
+      "raycast"
+      "obsidian"
+      "notion"
+      "linear"
+      "rectangle"
+      
+      # Utilities
+      "the-unarchiver"
+      "istat-menus"
+      
+      # Communication
+      "telegram"
+    ];
+    
+    # Mac App Store apps
+    masApps = {
+      "Hidden Bar" = 1452453066;
+    };
+  };
+}

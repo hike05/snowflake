@@ -1,0 +1,99 @@
+{ config, pkgs, lib, ... }:
+
+{
+  # Computer identity (will be overridden in hosts/)
+  networking = {
+    computerName = "snowflake";
+    hostName = "snowflake";
+    localHostName = "snowflake";
+  };
+
+  # Enable Touch ID for sudo
+  security.pam.enableSudoTouchIdAuth = true;
+
+  # macOS system settings
+  system = {
+    defaults = {
+      # Global domain settings
+      NSGlobalDomain = {
+        # Appearance
+        AppleInterfaceStyle = "Dark";
+        AppleInterfaceStyleSwitchesAutomatically = false;
+        
+        # Keyboard
+        AppleKeyboardUIMode = 3;  # Full keyboard access
+        ApplePressAndHoldEnabled = false;
+        KeyRepeat = 2;
+        InitialKeyRepeat = 15;
+        
+        # Mouse and trackpad
+        AppleShowScrollBars = "WhenScrolling";
+        NSScrollAnimationEnabled = true;
+        "com.apple.mouse.tapBehavior" = 1;
+        "com.apple.trackpad.scaling" = 3.0;
+        
+        # Misc
+        AppleShowAllExtensions = true;
+        NSAutomaticCapitalizationEnabled = false;
+        NSAutomaticDashSubstitutionEnabled = false;
+        NSAutomaticPeriodSubstitutionEnabled = false;
+        NSAutomaticQuoteSubstitutionEnabled = false;
+        NSAutomaticSpellingCorrectionEnabled = false;
+        NSNavPanelExpandedStateForSaveMode = true;
+        NSNavPanelExpandedStateForSaveMode2 = true;
+      };
+
+      # Dock
+      dock = {
+        autohide = true;
+        autohide-delay = 0.0;
+        autohide-time-modifier = 0.2;
+        orientation = "bottom";
+        show-recents = false;
+        show-process-indicators = true;
+        static-only = false;
+        minimize-to-application = true;
+        mru-spaces = false;
+        tilesize = 48;
+      };
+
+      # Finder
+      finder = {
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
+        ShowPathbar = true;
+        ShowStatusBar = true;
+        FXEnableExtensionChangeWarning = false;
+        FXPreferredViewStyle = "Nlsv";  # List view
+        FXDefaultSearchScope = "SCcf";  # Search current folder
+        CreateDesktop = true;
+        QuitMenuItem = true;
+      };
+
+      # Screenshots
+      screencapture = {
+        location = "~/Pictures/Screenshots";
+        type = "png";
+        disable-shadow = false;
+      };
+
+      # Mission Control
+      spaces = {
+        spans-displays = false;
+      };
+
+      # Trackpad
+      trackpad = {
+        Clicking = true;
+        TrackpadRightClick = true;
+        TrackpadThreeFingerDrag = false;
+      };
+    };
+  };
+  
+  # Apply system settings on activation
+  system.activationScripts.postUserActivation.text = ''
+    # Apply Dock settings
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+  '';
+}
